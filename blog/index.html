@@ -111,6 +111,27 @@
         
 <div class="resume-item d-flex flex-row mb-5">
   <div class="publication-content mr-auto">
+    <h3 class="mb-0"><a href="https://h-neco.github.io/blog/aws-alexa-bedrock/">alexaをbedrockで少し賢くしてみた</a></h3>
+    <div>■ はじめに AWS Bedrock を使って、Alexa を少し賢くしてみました。具体的には、Alexa のスキルを作成し、Bedrock の LLM を利用して質問応答機能を実装しました。 いちいちググらずで済むのは便利ですね。
+■ 構成図 bedrock だけ料金が多少かかるかもしれませんが、ほぼ 0 円で運用できると思います。
+処理フロー 家の Alexa に「AI スキルを開いて」と言い、スキル起動させる ◯◯ について教えて、検索して、翻訳して等リクエストする Alexa が AWS Lambda の API にリクエストを送信し、Lambda が Bedrock の LLM (claude3.7) に質問を投げる。 LLM が質問に対する回答を生成し、Lambda がその回答を Alexa に返す。 Alexa が回答を音声で読み上げる。 ■ Code https://github.com/h-neco/generative-ai-for-alexa
+# API開発 ./applications/bedrock-responder/ # Alexa スキル ./applications/alexa/ # AWS構築 ./terraform/ 開発・構築のポイント 制限 子供が変なことを聞かないように、質問の内容をモデレーションして、NG ワードが含まれている場合は、回答しないようにしました。 # https://github.com/h-neco/generative-ai-for-alexa/blob/main/applications/bedrock-responder/src/llm.ts#L8 &lt;moderation-rules&gt; - 意味のない数字や文字列は入力禁止です。 - 公序良俗に反するものは入力禁止です。 &lt;/moderation-rules&gt; パラメータにトークンを付けて、無制限に実行されないようにしました。 # https://github.</div>
+    <div><ul class="tags">
+    
+</ul>
+</div>
+  </div>
+  <div class="resume-date text-md-right flex-col">
+    <span class="text-primary">April 10, 2025</span>
+  </div>
+</div>
+
+      
+    
+      
+        
+<div class="resume-item d-flex flex-row mb-5">
+  <div class="publication-content mr-auto">
     <h3 class="mb-0"><a href="https://h-neco.github.io/blog/aws-ec2-stable-diffusion/">EC2 に stable-diffusion-auto1111 を立ち上げる</a></h3>
     <div>Intro EC2 で Stable diffusion を実現するためのメモです。 EC2 自体の構築やセキュリティグループ、VPC などの設定は割愛しています。
 GPU インスタンスを使用 stable-diffusion-webui を使用 python 3.10.6 を使用 nginx でリバースプロキシ 環境 イメージ：amazon linux 2023
@@ -472,7 +493,7 @@ $ sudo pip3 install selenium $ sudo pip3 install chromedriver-binary==83.0.4103.
 <div class="resume-item d-flex flex-row mb-5">
   <div class="publication-content mr-auto">
     <h3 class="mb-0"><a href="https://h-neco.github.io/blog/list/">List</a></h3>
-    <div>tags tags Recent Posts EC2(GPU インスタンス) に stable-diffusion-auto1111 を立ち上げる 2024-09-02 ECS タスクに SessionManager で接続する方法 2024-03-27 Docker のイメージをビルドするとき注意すること 2024-03-21 Trivy を用いたコンテナ Image,DockerFile への脆弱性診断 2024-03-21 multipass で ローカル docker 環境の構築 2024-03-20 chatgpt+mermaid でシーケンス図を作成する 2024-02-21 CloudFrontFunction と LambdaEdge の違い 2023-07-21 Docker から Terraform を実行する 2023-07-10 Codebuild 構築と Deploy フローの整備 2023-06-27 EFS バーストモードクレジット枯渇対策メモ 2023-05-03 AWS CLI を使った EC2 への EBS ボリュームの永続化 2023-05-01 Terraform のラッパーツール、Terragrunt の導入検証を行ってみた 2023-04-27 Lambda ローカル開発環境構築メモ (SAM | LocalStack | TypeScript) 2023-04-24 OIDC (Git to AWS)のデプロイメモ 2023-04-26 Packer と Ansible を使って Amazon Linux 2 に NAT インスタンスを作成する 2023-04-11 ブラウザのコンソールログを Selenium(ヘッドレスブラウザ)で取得する 2020-08-26 </div>
+    <div>tags aws Security Tools DevOps Book Recent Posts alexa を bedrock で少し賢くしてみた 2025-04-10 EC2(GPU インスタンス) に stable-diffusion-auto1111 を立ち上げる 2024-09-02 ECS タスクに SessionManager で接続する方法 2024-03-27 Docker のイメージをビルドするとき注意すること 2024-03-21 Trivy を用いたコンテナ Image,DockerFile への脆弱性診断 2024-03-21 multipass で ローカル docker 環境の構築 2024-03-20 chatgpt+mermaid でシーケンス図を作成する 2024-02-21 CloudFrontFunction と LambdaEdge の違い 2023-07-21 Docker から Terraform を実行する 2023-07-10 Codebuild 構築と Deploy フローの整備 2023-06-27 EFS バーストモードクレジット枯渇対策メモ 2023-05-03 AWS CLI を使った EC2 への EBS ボリュームの永続化 2023-05-01 Terraform のラッパーツール、Terragrunt の導入検証を行ってみた 2023-04-27 Lambda ローカル開発環境構築メモ (SAM | LocalStack | TypeScript) 2023-04-24 OIDC (Git to AWS)のデプロイメモ 2023-04-26 Packer と Ansible を使って Amazon Linux 2 に NAT インスタンスを作成する 2023-04-11 ブラウザのコンソールログを Selenium(ヘッドレスブラウザ)で取得する 2020-08-26 </div>
     <div><ul class="tags">
     
 </ul>

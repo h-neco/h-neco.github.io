@@ -6,7 +6,19 @@
     <description>Recent content in Tools on profile</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://h-neco.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://h-neco.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>alexaをbedrockで少し賢くしてみた</title>
+      <link>https://h-neco.github.io/blog/aws-alexa-bedrock/</link>
+      <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://h-neco.github.io/blog/aws-alexa-bedrock/</guid>
+      <description>■ はじめに AWS Bedrock を使って、Alexa を少し賢くしてみました。具体的には、Alexa のスキルを作成し、Bedrock の LLM を利用して質問応答機能を実装しました。 いちいちググらずで済むのは便利ですね。
+■ 構成図 bedrock だけ料金が多少かかるかもしれませんが、ほぼ 0 円で運用できると思います。
+処理フロー 家の Alexa に「AI スキルを開いて」と言い、スキル起動させる ◯◯ について教えて、検索して、翻訳して等リクエストする Alexa が AWS Lambda の API にリクエストを送信し、Lambda が Bedrock の LLM (claude3.7) に質問を投げる。 LLM が質問に対する回答を生成し、Lambda がその回答を Alexa に返す。 Alexa が回答を音声で読み上げる。 ■ Code https://github.com/h-neco/generative-ai-for-alexa
+# API開発 ./applications/bedrock-responder/ # Alexa スキル ./applications/alexa/ # AWS構築 ./terraform/ 開発・構築のポイント 制限 子供が変なことを聞かないように、質問の内容をモデレーションして、NG ワードが含まれている場合は、回答しないようにしました。 # https://github.com/h-neco/generative-ai-for-alexa/blob/main/applications/bedrock-responder/src/llm.ts#L8 &amp;lt;moderation-rules&amp;gt; - 意味のない数字や文字列は入力禁止です。 - 公序良俗に反するものは入力禁止です。 &amp;lt;/moderation-rules&amp;gt; パラメータにトークンを付けて、無制限に実行されないようにしました。 # https://github.</description>
+    </item>
+    
     <item>
       <title>multipassでの仮想マシンの作成/Docker環境構築</title>
       <link>https://h-neco.github.io/blog/vm-multipass/</link>

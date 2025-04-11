@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>profile | List</title>
+  <title>profile | alexaをbedrockで少し賢くしてみた</title>
   <meta name="description" content="">
 
   
   
     <meta property="og:image" content="https://h-neco.github.io/img/profile.png" />
-    <meta property="og:title" content="profile | List" />   
+    <meta property="og:title" content="profile | alexaをbedrockで少し賢くしてみた" />   
   
   <meta property="og:description" content="" />
   <meta name="author" content="h neco">
@@ -98,7 +98,7 @@
 
 
 <li class="breadcrumb-item active">
-  <a href="https://h-neco.github.io/blog/list/">List</a>
+  <a href="https://h-neco.github.io/blog/aws-alexa-bedrock/">alexaをbedrockで少し賢くしてみた</a>
 </li>
 
   </ol>
@@ -110,37 +110,65 @@
 <section class="resume-section p-3 p-lg-5 d-flex flex-column">
   <div class="my-auto">
   	<div class="mb-3 d-flex flex-row justify-content-between">
-    	<h2 class="mb-0"><span class="text-primary">List</span></h2>
-    	<span class="">January 1, 0001</span>
+    	<h2 class="mb-0"><span class="text-primary">alexaをbedrockで少し賢くしてみた</span></h2>
+    	<span class="">April 10, 2025</span>
     </div>
     <div>
-    	<h3 id="tags">tags</h3>
+    	<h3 id="-はじめに">■ はじめに</h3>
+<p>AWS Bedrock を使って、Alexa を少し賢くしてみました。具体的には、Alexa のスキルを作成し、Bedrock の LLM を利用して質問応答機能を実装しました。
+いちいちググらずで済むのは便利ですね。</p>
+<h3 id="-構成図">■ 構成図</h3>
+<p><img src="/blog/images/alexa-images.png" alt="構成図"></p>
+<p>bedrock だけ料金が多少かかるかもしれませんが、ほぼ 0 円で運用できると思います。</p>
+<h4 id="処理フロー">処理フロー</h4>
+<ol>
+<li>家の Alexa に「AI スキルを開いて」と言い、スキル起動させる</li>
+<li>◯◯ について教えて、検索して、翻訳して等リクエストする</li>
+<li>Alexa が AWS Lambda の API にリクエストを送信し、Lambda が Bedrock の LLM (claude3.7) に質問を投げる。</li>
+<li>LLM が質問に対する回答を生成し、Lambda がその回答を Alexa に返す。</li>
+<li>Alexa が回答を音声で読み上げる。</li>
+</ol>
+<h3 id="-code">■ Code</h3>
+<p><a href="https://github.com/h-neco/generative-ai-for-alexa">https://github.com/h-neco/generative-ai-for-alexa</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># API開発</span>
+</span></span><span style="display:flex;"><span>./applications/bedrock-responder/
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Alexa スキル</span>
+</span></span><span style="display:flex;"><span>./applications/alexa/
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># AWS構築</span>
+</span></span><span style="display:flex;"><span>./terraform/
+</span></span></code></pre></div><h4 id="開発構築のポイント">開発・構築のポイント</h4>
+<ol>
+<li>制限</li>
+</ol>
 <ul>
-<li><a href="../../tags/aws/">aws</a></li>
-<li><a href="../../tags/Security/">Security</a></li>
-<li><a href="../../tags/Tools/">Tools</a></li>
-<li><a href="../../tags/DevOps/">DevOps</a></li>
-<li><a href="../../tags/Book/">Book</a></li>
+<li>子供が変なことを聞かないように、質問の内容をモデレーションして、NG ワードが含まれている場合は、回答しないようにしました。</li>
 </ul>
-<h3 id="recent-posts">Recent Posts</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># https://github.com/h-neco/generative-ai-for-alexa/blob/main/applications/bedrock-responder/src/llm.ts#L8</span>
+</span></span><span style="display:flex;"><span>&lt;moderation-rules&gt;
+</span></span><span style="display:flex;"><span>- 意味のない数字や文字列は入力禁止です。
+</span></span><span style="display:flex;"><span>- 公序良俗に反するものは入力禁止です。
+</span></span><span style="display:flex;"><span>&lt;/moderation-rules&gt;
+</span></span></code></pre></div><ul>
+<li>パラメータにトークンを付けて、無制限に実行されないようにしました。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># https://github.com/h-neco/generative-ai-for-alexa/blob/main/applications/bedrock-responder/src/index.ts#L100</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>body.token !<span style="color:#f92672">==</span> process.env.TOKEN<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    console.error<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;token is invalid&#39;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> false;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="2">
+<li>LLM 戻り値の固定化</li>
+</ol>
 <ul>
-<li><a href="../aws-alexa-bedrock">alexa を bedrock で少し賢くしてみた</a> 2025-04-10</li>
-<li><a href="../aws-ec2-stable-diffusion">EC2(GPU インスタンス) に stable-diffusion-auto1111 を立ち上げる</a> 2024-09-02</li>
-<li><a href="../aws-ecs-ssm">ECS タスクに SessionManager で接続する方法</a> 2024-03-27</li>
-<li><a href="../docker-security-image-build">Docker のイメージをビルドするとき注意すること</a> 2024-03-21</li>
-<li><a href="../docker-trivy">Trivy を用いたコンテナ Image,DockerFile への脆弱性診断</a> 2024-03-21</li>
-<li><a href="../vm-multipass">multipass で ローカル docker 環境の構築</a> 2024-03-20</li>
-<li><a href="../chatgpt-mermaid">chatgpt+mermaid でシーケンス図を作成する</a> 2024-02-21</li>
-<li><a href="../aws-cloudfront-functions">CloudFrontFunction と LambdaEdge の違い</a> 2023-07-21</li>
-<li><a href="../docker-terraform">Docker から Terraform を実行する</a> 2023-07-10</li>
-<li><a href="../aws-codebuild">Codebuild 構築と Deploy フローの整備</a> 2023-06-27</li>
-<li><a href="../aws-efs">EFS バーストモードクレジット枯渇対策メモ</a> 2023-05-03</li>
-<li><a href="../aws-ec2-ebs-delete-on-termination">AWS CLI を使った EC2 への EBS ボリュームの永続化</a> 2023-05-01</li>
-<li><a href="../cicd-terragrunt-1">Terraform のラッパーツール、Terragrunt の導入検証を行ってみた</a> 2023-04-27</li>
-<li><a href="../aws-lambda-local-execution">Lambda ローカル開発環境構築メモ (SAM | LocalStack | TypeScript)</a> 2023-04-24</li>
-<li><a href="../cicd-oidc">OIDC (Git to AWS)のデプロイメモ</a> 2023-04-26</li>
-<li><a href="../aws-ec2-nat-instance">Packer と Ansible を使って Amazon Linux 2 に NAT インスタンスを作成する</a> 2023-04-11</li>
-<li><a href="../browser-selenium">ブラウザのコンソールログを Selenium(ヘッドレスブラウザ)で取得する</a> 2020-08-26</li>
+<li>LLM の回答フォーマット（レスポンスの型）を固定化するために、tools を使いました。
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html">https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html</a></li>
+</ul>
+<ol start="3">
+<li>インフラ</li>
+</ol>
+<ul>
+<li>パラメータを外部変数化して、再利用できるようにしました。</li>
+<li>LambdaFunctionURLs のみ利用してリソースを最小化してシンプルな構成にしてます。</li>
 </ul>
 
 	    
