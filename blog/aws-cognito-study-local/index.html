@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>profile | Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</title>
+  <meta name="description" content="">
+
+  
+  
+    <meta property="og:image" content="https://h-neco.github.io/img/profile.png" />
+    <meta property="og:title" content="profile | Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）" />   
+  
+  <meta property="og:description" content="" />
+  <meta name="author" content="h neco">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900&display=swap"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap"></noscript>
+  <link rel="preload" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/css/devicons.min.css" integrity="sha512-JW3fT0YTK7pT7w437SoX6GcW76jOZ6E0jGmrqBAcloC4GKT+njHOY4fX5KxJ9WfIXTkNrAF994525fAHp+KCxg==" crossorigin="anonymous" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/css/devicons.min.css" integrity="sha512-JW3fT0YTK7pT7w437SoX6GcW76jOZ6E0jGmrqBAcloC4GKT+njHOY4fX5KxJ9WfIXTkNrAF994525fAHp+KCxg==" crossorigin="anonymous"></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" integrity="sha512-QKC1UZ/ZHNgFzVKSAhV5v5j73eeL9EEN289eKAEFaAjgAiobVAnVv/AGuPbXsKl1dNoel3kNr6PYnSiTzVVBCw==" crossorigin="anonymous" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" integrity="sha512-QKC1UZ/ZHNgFzVKSAhV5v5j73eeL9EEN289eKAEFaAjgAiobVAnVv/AGuPbXsKl1dNoel3kNr6PYnSiTzVVBCw==" crossorigin="anonymous"></noscript>
+  
+  <link rel="preload" href="https://h-neco.github.io/css/resume.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/resume.css"></noscript>
+  <link rel="preload" href="https://h-neco.github.io/css/tweaks.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/tweaks.css"></noscript>
+  <link rel="preload" href="https://h-neco.github.io/css/resume-override.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/resume-override.css"></noscript>
+  <meta name="generator" content="Hugo 0.111.3">
+  
+   
+  
+</head>
+<body id="page-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-profile fixed-top" id="sideNav">
+  <a class="navbar-brand js-scroll-trigger" href="#page-top">
+    <span class="d-block d-lg-none">h neco</span>
+    <span class="d-none d-lg-block">
+      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/img/profile.png" alt="">
+    </span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/#about">About</a>
+      </li>
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#skills">Skills</a>
+          </li>
+      
+      
+      
+      
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#experience">Experience</a>
+          </li>
+      
+      
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#blog">Blog</a>
+          </li>
+      
+    </ul>
+  </div>
+</nav>
+
+  <div class="container-fluid p-0">
+    
+<nav aria-label="breadcrumb">
+  <ol  class="breadcrumb">
+    
+
+
+
+
+
+<li class="breadcrumb-item">
+  <a href="https://h-neco.github.io/">Home</a>
+</li>
+
+
+<li class="breadcrumb-item">
+  <a href="https://h-neco.github.io/blog/">Blog</a>
+</li>
+
+
+<li class="breadcrumb-item active">
+  <a href="https://h-neco.github.io/blog/aws-cognito-study-local/">Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</a>
+</li>
+
+  </ol>
+</nav>
+
+
+
+
+<section class="resume-section p-3 p-lg-5 d-flex flex-column">
+  <div class="my-auto">
+  	<div class="mb-3 d-flex flex-row justify-content-between">
+    	<h2 class="mb-0"><span class="text-primary">Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</span></h2>
+    	<span class="">November 23, 2025</span>
+    </div>
+    <div>
+    	<h2 id="-はじめに">■ はじめに</h2>
+<p>「Cognito の認証フローを完全に理解したい」「実際にアプリに実装する前にローカルで動かしたい」という理由から、<strong>Cognito をローカルで“ほぼ本番同等”に動かす環境</strong>を構築してみました。
+検証レベルならどれも無料枠で使える AWS サービスなのですが、ローカルでも動かせると便利そうなので試してみました。</p>
+<p>使用した技術：</p>
+<ul>
+<li><strong>LocalStack</strong>（Cognito / Lambda などのローカル AWS）</li>
+<li><strong>Moto</strong>（Cognito の動作をより忠実にモック）</li>
+<li><strong>Express API</strong>（API 各種）</li>
+<li><strong>React + Vite</strong>（フロントエンド）</li>
+<li><strong>Mailhog</strong>（メール送信のモック）</li>
+<li><strong>httpOnly Cookie による Refresh Token ローテーション</strong></li>
+<li><strong>Jest + supertest</strong>（E2E テスト）</li>
+<li><strong>dynamoDB</strong> 操作ログの保存</li>
+</ul>
+<p>今回の学びは GitHub に公開しています。
+ただ、なんとなく動作検証してみただけなので結構雑いです。</p>
+<p>👉 <a href="https://github.com/h-neco/study-local-aws-cognito">https://github.com/h-neco/study-local-aws-cognito</a></p>
+<hr>
+<h2 id="環境構築">環境構築</h2>
+<ul>
+<li>docker</li>
+</ul>
+<p>localstack,moto,mailhog を立ち上げます。
+localstack 無料プランでは、cognito は扱えないので、moto を利用します。
+また、cognito によるメール送信を擬似的に再現するため、mailhog を利用します。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">localstack</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">localstack/localstack</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">localstack</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#e6db74">&#34;4566:4566&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">SERVICES=s3,dynamodb,lambda</span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">DEBUG=1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#e6db74">&#34;./localstack:/var/lib/localstack&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">local-net</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">moto</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">motoserver/moto:latest</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">moto</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">MOTO_BIND_HOST=0.0.0.0</span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">MOTO_PORT=5000</span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">MOTO_ALLOW_NONEXISTENT_SERVICE=True</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">command</span>: [<span style="color:#e6db74">&#34;-H&#34;</span>, <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, <span style="color:#e6db74">&#34;-p&#34;</span>, <span style="color:#e6db74">&#34;5000&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#e6db74">&#34;5001:5000&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">local-net</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">mailhog</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">mailhog/mailhog</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#e6db74">&#34;8025:8025&#34;</span> <span style="color:#75715e"># Web UI</span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#e6db74">&#34;1025:1025&#34;</span> <span style="color:#75715e"># SMTP</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">local-net</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">local-net</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">driver</span>: <span style="color:#ae81ff">bridge</span>
+</span></span></code></pre></div><ul>
+<li>terraform</li>
+</ul>
+<p>provider をローカルに向けて、endpoint を設定していきます。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">provider</span> <span style="color:#e6db74">&#34;aws&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">region</span>                      <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;us-east-1&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">access_key</span>                  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mock&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">secret_key</span>                  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mock&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">s3_use_path_style</span>           <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">skip_credentials_validation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">skip_metadata_api_check</span>     <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">skip_requesting_account_id</span>  <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">endpoints</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">s3</span>         <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://127.0.0.1:4566&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">dynamodb</span>   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://127.0.0.1:4566&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cognitoidp</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://127.0.0.1:5001&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="機能概要">機能概要</h2>
+<p>ローカルですが <strong>サインアップ / ログイン / ログアウト /メール変更 / パスワード変更 /退会</strong></p>
+<p>管理画面では、<strong>ユーザー一覧表示 / 削除 / 権限設定</strong> を含むフロー一式を再現しています。</p>
+<ul>
+<li>http://localhost:5173/</li>
+</ul>
+<p>ログイン、サインアップ、管理画面ログインへの Path を表示させてみる</p>
+<p><img src="/blog/images/aws-cognito-study-local-home.png" alt="home"></p>
+<ul>
+<li>http://localhost:5173/signup</li>
+</ul>
+<p>サインアップすると、mailhog でメール受信しリンクを押下するとアカウントが有効化される</p>
+<p><img src="/blog/images/aws-cognito-study-local-mailhog.png" alt="有効化"></p>
+<ul>
+<li>http://localhost:5173/login</li>
+</ul>
+<p><img src="/blog/images/aws-cognito-study-local-login.png" alt="ログイン"></p>
+<ul>
+<li>http://localhost:5173/user/dashboard</li>
+</ul>
+<p>ログイン後ページを用意してみる</p>
+<p><img src="/blog/images/aws-cognito-study-local-dashboard.png" alt="ダッシュボード"></p>
+<ul>
+<li>http://localhost:5173/admin/dashboard</li>
+</ul>
+<p>管理画面も用意してみる</p>
+<p><img src="/blog/images/aws-cognito-study-local-admin-dashboard.png" alt="ダッシュボード"></p>
+<hr>
+<h2 id="-処理フロー">■ 処理フロー</h2>
+<h3 id="1-ログイン">1. ログイン</h3>
+<ul>
+<li>Cognito にメール + PW を送信</li>
+<li>AccessToken と RefreshToken を発行</li>
+<li>RefreshToken は httpOnly Cookie に保存</li>
+<li>AccessToken はメモリ or localStorage に保存</li>
+</ul>
+<h3 id="2-api-実行">2. API 実行</h3>
+<p>各 API へのリクエストは Authorization ヘッダーにトークンを付与します。
+全部で、10-15 個ぐらいエンドポイントがあり、サインアップとかログイン以外は、認証を通さないと 401 を返します。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>React <span style="color:#f92672">(</span>accessToken付与<span style="color:#f92672">)</span> ──────────────▶ Express <span style="color:#f92672">(</span>認可OK<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h3 id="3-accesstoken-が期限切れ401">3. AccessToken が期限切れ（401）</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>- AccessToken期限切れ（401）
+</span></span><span style="display:flex;"><span>React
+</span></span><span style="display:flex;"><span>   └─ axios interceptor が自動で refresh-tokens を実行
+</span></span><span style="display:flex;"><span>        ↓
+</span></span><span style="display:flex;"><span>        POST /auth/refresh-tokens（Cookie自動送信）
+</span></span><span style="display:flex;"><span>        ↓
+</span></span><span style="display:flex;"><span>       Express ─────────▶ Cognito<span style="color:#f92672">(</span>Moto<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                       ◀──────── AccessToken
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- アクセストークン更新 → 直前の API を自動再実行
+</span></span></code></pre></div><h3 id="4-refreshtoken-ローテーション">4. RefreshToken ローテーション</h3>
+<p>AWS のアップデートで出来るようになったみたいなので、やればよかったけどやってないです、、、</p>
+<hr>
+<h2 id="最後に">最後に</h2>
+<p>検証にあんまり時間かけたくなかったので、雑な感じになってしまった。
+TODO もいくつか残してるので、気が向いたときにやろうかな..</p>
+
+	    
+	</div>
+    <div>
+    	
+    </div>
+    <ul class="tags">
+    
+</ul>
+
+  </div>
+</section>
+
+    <section><span style="color: #999999;">Nifty <a href="https://codepen.io/wbeeftink/pen/dIaDH">tech tag lists</a> from <a class="pen-owner-link" href="https://codepen.io/wbeeftink">Wouter Beeftink</a> </span>
+      
+    </section>
+  </div>
+  
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+  
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous"></script>
+  
+  <script async src="/js/resume.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6BYZ5M6VX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-Z6BYZ5M6VX');
+  </script>
+  
+
+  
+</body>
+</html>

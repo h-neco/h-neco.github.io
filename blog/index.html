@@ -111,6 +111,29 @@
         
 <div class="resume-item d-flex flex-row mb-5">
   <div class="publication-content mr-auto">
+    <h3 class="mb-0"><a href="https://h-neco.github.io/blog/aws-cognito-study-local/">Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</a></h3>
+    <div>■ はじめに 「Cognito の認証フローを完全に理解したい」「実際にアプリに実装する前にローカルで動かしたい」という理由から、Cognito をローカルで“ほぼ本番同等”に動かす環境を構築してみました。 検証レベルならどれも無料枠で使える AWS サービスなのですが、ローカルでも動かせると便利そうなので試してみました。
+使用した技術：
+LocalStack（Cognito / Lambda などのローカル AWS） Moto（Cognito の動作をより忠実にモック） Express API（API 各種） React + Vite（フロントエンド） Mailhog（メール送信のモック） httpOnly Cookie による Refresh Token ローテーション Jest + supertest（E2E テスト） dynamoDB 操作ログの保存 今回の学びは GitHub に公開しています。 ただ、なんとなく動作検証してみただけなので結構雑いです。
+👉 https://github.com/h-neco/study-local-aws-cognito
+環境構築 docker localstack,moto,mailhog を立ち上げます。 localstack 無料プランでは、cognito は扱えないので、moto を利用します。 また、cognito によるメール送信を擬似的に再現するため、mailhog を利用します。
+services: localstack: image: localstack/localstack container_name: localstack ports: - &#34;4566:4566&#34; environment: - SERVICES=s3,dynamodb,lambda - DEBUG=1 volumes: - &#34;./localstack:/var/lib/localstack&#34; networks: - local-net moto: image: motoserver/moto:latest container_name: moto environment: - MOTO_BIND_HOST=0.</div>
+    <div><ul class="tags">
+    
+</ul>
+</div>
+  </div>
+  <div class="resume-date text-md-right flex-col">
+    <span class="text-primary">November 23, 2025</span>
+  </div>
+</div>
+
+      
+    
+      
+        
+<div class="resume-item d-flex flex-row mb-5">
+  <div class="publication-content mr-auto">
     <h3 class="mb-0"><a href="https://h-neco.github.io/blog/aws-alexa-bedrock/">alexaをbedrockで少し賢くしてみた</a></h3>
     <div>■ はじめに AWS Bedrock を使って、Alexa を少し賢くしてみました。具体的には、Alexa のスキルを作成し、Bedrock の LLM を利用して質問応答機能を実装しました。 いちいちググらずで済むのは便利ですね。
 ■ 構成図 bedrock だけ料金が多少かかるかもしれませんが、ほぼ 0 円で運用できると思います。

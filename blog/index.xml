@@ -8,6 +8,20 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 17 May 2023 07:27:58 +0900</lastBuildDate><atom:link href="https://h-neco.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</title>
+      <link>https://h-neco.github.io/blog/aws-cognito-study-local/</link>
+      <pubDate>Sun, 23 Nov 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://h-neco.github.io/blog/aws-cognito-study-local/</guid>
+      <description>■ はじめに 「Cognito の認証フローを完全に理解したい」「実際にアプリに実装する前にローカルで動かしたい」という理由から、Cognito をローカルで“ほぼ本番同等”に動かす環境を構築してみました。 検証レベルならどれも無料枠で使える AWS サービスなのですが、ローカルでも動かせると便利そうなので試してみました。
+使用した技術：
+LocalStack（Cognito / Lambda などのローカル AWS） Moto（Cognito の動作をより忠実にモック） Express API（API 各種） React + Vite（フロントエンド） Mailhog（メール送信のモック） httpOnly Cookie による Refresh Token ローテーション Jest + supertest（E2E テスト） dynamoDB 操作ログの保存 今回の学びは GitHub に公開しています。 ただ、なんとなく動作検証してみただけなので結構雑いです。
+👉 https://github.com/h-neco/study-local-aws-cognito
+環境構築 docker localstack,moto,mailhog を立ち上げます。 localstack 無料プランでは、cognito は扱えないので、moto を利用します。 また、cognito によるメール送信を擬似的に再現するため、mailhog を利用します。
+services: localstack: image: localstack/localstack container_name: localstack ports: - &amp;#34;4566:4566&amp;#34; environment: - SERVICES=s3,dynamodb,lambda - DEBUG=1 volumes: - &amp;#34;./localstack:/var/lib/localstack&amp;#34; networks: - local-net moto: image: motoserver/moto:latest container_name: moto environment: - MOTO_BIND_HOST=0.</description>
+    </item>
+    
+    <item>
       <title>alexaをbedrockで少し賢くしてみた</title>
       <link>https://h-neco.github.io/blog/aws-alexa-bedrock/</link>
       <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
