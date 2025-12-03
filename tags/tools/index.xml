@@ -39,7 +39,7 @@ services: localstack: image: localstack/localstack container_name: localstack po
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/vm-multipass/</guid>
-      <description>Intro 以前は、vagrant+virtualbox で仮想マシンを作成してましたが、m2 mac に端末を変えたため、multipass に切り替えました。
+      <description>はじめに 以前は、vagrant+virtualbox で仮想マシンを作成してましたが、m2 mac に端末を変えたため、multipass に切り替えました。
 multipass は、Ubuntu の仮想マシンを簡単に作成できるツールです。multipass を使用することで、仮想マシンの作成、起動、停止、削除などの操作を簡単に行うことができます。
 install $ brew install multipass ==&amp;gt; Installing Cask multipass ==&amp;gt; Running installer for multipass with sudo; the password may be necessary. Password: installer: Package name is multipass installer: Installing at base path / installer: The install was successful. 🍺 multipass was successfully installed! $ multipass version multipass 1.13.1+mac multipassd 1.13.1+mac 基本コマンド 詳しくは以下参照 https://multipass.run/docs/multipass-cli-client # 新規作成 $ multipass launch -n test-vm-01 Launched: test-vm-01 # 確認 $ multipass list Name State IPv4 Image test-vm-01 Running 192.</description>
     </item>

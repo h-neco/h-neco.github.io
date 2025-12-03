@@ -23,7 +23,7 @@
       <pubDate>Wed, 26 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/cicd-oidc/</guid>
-      <description>Intro 以前は、GitHub や Bitbucket から個人の AWS へのデプロイ時にアクセスキーとシークレットキーを使用していました。しかし、これを管理するのが煩雑になったため、OIDC に切り替えました。
+      <description>はじめに 以前は、GitHub や Bitbucket から個人の AWS へのデプロイ時にアクセスキーとシークレットキーを使用していました。しかし、これを管理するのが煩雑になったため、OIDC に切り替えました。
 OIDC (OpenID Connect) は、認証と認可のためのオープンスタンダードです。OIDC を使用することで、AWS へのアクセスを安全に管理し、認証プロバイダを介してシームレスなアクセス体験を提供できます。OIDC を使用する場合、AWS へのアクセスにはアクセストークンが使用されます。
 OIDC を導入することで、アクセスキーやシークレットキーを個別に管理する必要がなくなり、セキュリティと利便性が向上します。
 やること Terraform で OIDC を設定する方法 GitHub Bitbucket OIDC を使用してデプロイする方法 シンプルな GitHub Actions と Bitbucket Pipelines の作成 技術要素 OIDC AWS Bitbucket GitHub Terraform What is OIDC? OIDC（OpenID Connect）は、OAuth 2.0 プロトコルを拡張し、Web アプリケーションやモバイルアプリケーションにおけるユーザー認証の仕組みを提供する認証プロトコルです。
@@ -38,7 +38,7 @@ Benefits of OIDC Git からのデプロイに OIDC を使用することで、�
       <pubDate>Sat, 22 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/cicd-terragrunt-1/</guid>
-      <description>Intro Terraform の Wrapper ツール、Terragrunt 導入の検証を行いました。 導入の検証 通常、私は Terraform を使用していますが、次のような不便さがありました： 各デプロイの影響範囲を最小限に抑えるために、Git リポジトリをより小さなものに分割する必要がありました。Terraform のバージョンアップが面倒でした。 コードからリソースの依存関係を理解するのが難しかったです。 depends_on が明示的に使用できない場所でデプロイ順序に注意する必要がありました。 導入後の課題 導入に関して、以下の 2 点について検証が保留されています。もし詳しい方がいたら相談に乗っていただけると幸いです。 Terraform の管理だけでなく、Terragrunt のバージョン管理も行う必要があります。バージョンアップのプロセスはどのように変わるのか もし Terragrunt の開発が停止した場合、スムーズに Terraform のコードに戻せるか 技術要素 terraform terragrunt aws Terragrunt とは Terragrunt は、Terraform を使用してインフラストラクチャを管理するための作業を簡素化するための Terraform Wrapper として知られるオープンソースのツールです。Terragrunt は Terraform が提供する機能を拡張し、モジュールのコード再利用、柔軟な構成、再利用性の向上を可能にします。特に、Terraform を使用して複数の環境やアカウントを管理する際に Terragrunt は非常に便利です。
+      <description>はじめに Terraform の Wrapper ツール、Terragrunt 導入の検証を行いました。 導入の検証 通常、私は Terraform を使用していますが、次のような不便さがありました： 各デプロイの影響範囲を最小限に抑えるために、Git リポジトリをより小さなものに分割する必要がありました。Terraform のバージョンアップが面倒でした。 コードからリソースの依存関係を理解するのが難しかったです。 depends_on が明示的に使用できない場所でデプロイ順序に注意する必要がありました。 導入後の課題 導入に関して、以下の 2 点について検証が保留されています。もし詳しい方がいたら相談に乗っていただけると幸いです。 Terraform の管理だけでなく、Terragrunt のバージョン管理も行う必要があります。バージョンアップのプロセスはどのように変わるのか もし Terragrunt の開発が停止した場合、スムーズに Terraform のコードに戻せるか 技術要素 terraform terragrunt aws Terragrunt とは Terragrunt は、Terraform を使用してインフラストラクチャを管理するための作業を簡素化するための Terraform Wrapper として知られるオープンソースのツールです。Terragrunt は Terraform が提供する機能を拡張し、モジュールのコード再利用、柔軟な構成、再利用性の向上を可能にします。特に、Terraform を使用して複数の環境やアカウントを管理する際に Terragrunt は非常に便利です。
 インストール $ brew install tfenv # Installs Terraform (version specified in .terraform-version) $ brew install tgenv # Installs Terragrunt (version specified in .terragrunt-version) ###　フォルダ構成</description>
     </item>
     
