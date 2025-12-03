@@ -8,6 +8,21 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 10 Feb 2018 18:56:13 -0500</lastBuildDate><atom:link href="https://h-neco.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話</title>
+      <link>https://h-neco.github.io/blog/aws-lambda-local-error-1/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://h-neco.github.io/blog/aws-lambda-local-error-1/</guid>
+      <description>はじめに LocalStack + Terraform + Node.js Lambda で Lambda をデプロイしたときに、以下のエラーでハマりました。
+/var/runtime/index.mjs Cannot find module &amp;#39;index&amp;#39; 結論から言うと、原因は Terraform の archive_file ではなく、LocalStack が ZIP 内の index.js を ESM と誤判定すること です。
+発生したエラー 端末で手動で ZIP 化した場合は正常に Lambda が動作 sam local でも AWS 本番環境でも正常 Terraform で archive_file を使って作った ZIP を LocalStack にデプロイするとエラー つまり、ZIP の中身や展開自体は問題ではなく、LocalStack がモジュール形式を判定する段階で誤っている のが原因です。
+原因 LocalStack の Node.js 20 ランタイム（あるいは内部の ZIP 処理）が、CommonJS の index.js を ESM と誤判定して index.mjs を読み込もうとするため発生します。
+結果として以下のようなエラーが出ます。
+Require stack:
+/var/runtime/index.mjs Cannot find module &amp;lsquo;index&amp;rsquo; 解決策 この問題を回避するには、以下の方法があります</description>
+    </item>
+    
+    <item>
       <title>Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</title>
       <link>https://h-neco.github.io/blog/aws-cognito-study-local/</link>
       <pubDate>Sun, 23 Nov 2025 00:00:00 +0000</pubDate>
@@ -39,7 +54,7 @@ services: localstack: image: localstack/localstack container_name: localstack po
       <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-stable-diffusion/</guid>
-      <description>Intro EC2 で Stable diffusion を実現するためのメモです。 EC2 自体の構築やセキュリティグループ、VPC などの設定は割愛しています。
+      <description>はじめに EC2 で Stable diffusion を実現するためのメモです。 EC2 自体の構築やセキュリティグループ、VPC などの設定は割愛しています。
 GPU インスタンスを使用 stable-diffusion-webui を使用 python 3.10.6 を使用 nginx でリバースプロキシ 環境 イメージ：amazon linux 2023
 インスタンスタイプ：g4dn.xlarge
 GPU 環境構築 NVIDIA ドライバーと CUDA をインストール 参考 https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/install-nvidia-driver.html https://docs.nvidia.com/cuda/cuda-installation-guide-linux/#amazon-linux-2023 dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) kernel-modules-extra-$(uname -r) dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/amzn2023/x86_64/cuda-amzn2023.repo dnf module install nvidia-driver:latest-dkms dnf install cuda-toolkit dnf install nvidia-gds stable-diffusion-webui の構築 インストール git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui cd stable-diffusion-webui ln -s . stable-diffusion-webui # 起動スクリプト修正(shareオプションは使わない) vim webui-user.sh export COMMANDLINE_ARGS=&amp;#34;--xformers --enable-insecure-extension-access&amp;#34; python 環境構築 python 3.</description>
@@ -82,7 +97,7 @@ SSMpluginをインストールしてください。 ECS のタスクロールに
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/docker-security-image-build/</guid>
-      <description>Intro クレデンシャルをビルド中に削除しても、レイヤに残ってしまう件について実際に手を動かして確認してみます。
+      <description>はじめに クレデンシャルをビルド中に削除しても、レイヤに残ってしまう件について実際に手を動かして確認してみます。
 docker の環境構築についてはこちら 環境構築 事前準備 適当なディレクトリを作成し、Dockerfile を作成します。 シークレットにすべき内容を含むファイルを作成し、削除します。 ubuntu@test-vm-01:~/test$ cat Dockerfile FROM public.ecr.aws/nginx/nginx:1.25-alpine-slim RUN echo &amp;#34;this is secret&amp;#34; &amp;gt; /secret.txt RUN rm /secret.txt build ubuntu@test-vm-01:~/test$ docker build -f Dockerfile -t test:latast . イメージを保存し、レイヤを確認します。 ubuntu@test-vm-01:~/test$ docker save test:latast | tar -xC dump/ ubuntu@test-vm-01:~/test$ grep &amp;#34;this is secret&amp;#34; dump/blobs/sha256/26e6cd8b82ed33846375b5484f907ec7547b1b58919e607d7954f6ed9f36f5ab ... {&amp;#34;created&amp;#34;:&amp;#34;2024-03-21T16:21:04.288826451+09:00&amp;#34;,&amp;#34;created_by&amp;#34;:&amp;#34;RUN /bin/sh -c echo \&amp;#34;this is secret\&amp;#34; \u003e /secret.txt # buildkit&amp;#34;,&amp;#34;comment&amp;#34;:&amp;#34;buildkit.dockerfile.v0&amp;#34;},{&amp;#34;created&amp;#34;:&amp;#34;2024-03-21T16:21:04.637976236+09:00&amp;#34;,&amp;#34;created_by&amp;#34;:&amp;#34;RUN /bin/sh -c rm /secret.txt # buildkit&amp;#34;,&amp;#34;comment&amp;#34;:&amp;#34;buildkit.dockerfile.v0&amp;#34;}],&amp;#34;os&amp;#34;:&amp;#34;linux&amp;#34;,&amp;#34;rootfs&amp;#34;:{&amp;#34;type&amp;#34;:&amp;#34;layers&amp;#34;,&amp;#34;diff_ids&amp;#34;: ... まとめ クレデンシャルをビルド中に削除しても、レイヤに残ってしまうので、公開するイメージには含めないようにすることが重要です。 </description>
     </item>
     
@@ -92,7 +107,7 @@ docker の環境構築についてはこちら 環境構築 事前準備 適当�
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/vm-multipass/</guid>
-      <description>Intro 以前は、vagrant+virtualbox で仮想マシンを作成してましたが、m2 mac に端末を変えたため、multipass に切り替えました。
+      <description>はじめに 以前は、vagrant+virtualbox で仮想マシンを作成してましたが、m2 mac に端末を変えたため、multipass に切り替えました。
 multipass は、Ubuntu の仮想マシンを簡単に作成できるツールです。multipass を使用することで、仮想マシンの作成、起動、停止、削除などの操作を簡単に行うことができます。
 install $ brew install multipass ==&amp;gt; Installing Cask multipass ==&amp;gt; Running installer for multipass with sudo; the password may be necessary. Password: installer: Package name is multipass installer: Installing at base path / installer: The install was successful. 🍺 multipass was successfully installed! $ multipass version multipass 1.13.1+mac multipassd 1.13.1+mac 基本コマンド 詳しくは以下参照 https://multipass.run/docs/multipass-cli-client # 新規作成 $ multipass launch -n test-vm-01 Launched: test-vm-01 # 確認 $ multipass list Name State IPv4 Image test-vm-01 Running 192.</description>
     </item>
@@ -103,7 +118,7 @@ install $ brew install multipass ==&amp;gt; Installing Cask multipass ==&amp;gt;
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/docker-trivy/</guid>
-      <description>Intro trivy は、コンテナイメージの脆弱性診断を行うツールです。trivy を使用することで、コンテナイメージに含まれる脆弱性を検出し、セキュリティを向上させることができます。
+      <description>はじめに trivy は、コンテナイメージの脆弱性診断を行うツールです。trivy を使用することで、コンテナイメージに含まれる脆弱性を検出し、セキュリティを向上させることができます。
 docker の環境構築についてはこちら 環境構築 作業の大枠 Dockerfile に対して trivy で診断を行います。 問題なければ、イメージをビルドし、trivy で再度スキャンを行います。 事前準備 適当なディレクトリを作成し、Dockerfile を作成します。 $ mkdir test $ vim test/Dockerfile FROM public.ecr.aws/nginx/nginx:1.25-alpine-slim EXPOSE 80/tcp 診断 DockerFile を trivy で診断します。config コマンドを実行します。 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/test:/workdir aquasec/trivy config --ignorefile .trivy/.trivyignore --severity HIGH,CRITICAL . 2024-03-20T13:16:35.209Z	INFO	Misconfiguration scanning is enabled 2024-03-20T13:16:35.210Z	INFO	Need to update the built-in policies 2024-03-20T13:16:35.211Z	INFO	Downloading the built-in policies... 46.13 KiB / 46.</description>
     </item>
     
@@ -159,7 +174,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-efs/</guid>
-      <description>Intro EFS バーストモードのクレジット枯渇対策メモ EFS をバーストモードで使用していて、クレジットが不足してきたため、私が取った対策をメモとして提供します。 技術要素 EFS aws EFS の 2 つのモード EFS には 2 つのモードがあります: バーストモード（汎用）とプロビジョンドモード。
+      <description>はじめに EFS バーストモードのクレジット枯渇対策メモ EFS をバーストモードで使用していて、クレジットが不足してきたため、私が取った対策をメモとして提供します。 技術要素 EFS aws EFS の 2 つのモード EFS には 2 つのモードがあります: バーストモード（汎用）とプロビジョンドモード。
 バーストモードは、使用されているストレージの量に基づいてトラフィックを自動的に調整し、一時的なトラフィックの増加に対応できます。バースト可能な帯域幅はトラフィックの使用状況によって異なり、最低 105 Mbps のバーストが可能です。ただし、1 秒あたりの読み取り/書き込みリクエストの数には制限があり、制限を超えるとスループットが低下する可能性があります。
 プロビジョンドモードでは、ボリュームのスループット、最小/最大/バースト、および書き込みスループットを設定できます。読み取りスループットは書き込みスループットの 3 倍です。プロビジョンドモードはトラフィックに基づいた自動スケーリングはありませんが、スループットの設定に基づいて必要なトラフィックに対応できます。
 バーストモード（汎用）の注意事項と対策 バーストモード（汎用）の注意事項と対策
@@ -178,7 +193,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-ebs-delete-on-termination/</guid>
-      <description>Intro デフォルトでは、EC2 インスタンスが終了すると、アタッチされた EBS ボリュームも削除されます。しかし、AWS CLI を使用してこれらを永続化する方法を探ってみましょう。 技術要素 EC2/EBS コマンド タグによってフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が true である場合、ボリュームは永続化されていないことを意味します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .Reservations[0].Instances[0].BlockDeviceMappings [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;AttachTime&amp;#34;: &amp;#34;2023-04-18T04:59:14+00:00&amp;#34;, &amp;#34;DeleteOnTermination&amp;#34;: true, &amp;#34;Status&amp;#34;: &amp;#34;attached&amp;#34;, &amp;#34;VolumeId&amp;#34;: &amp;#34;vol-xxxxxxxxxxxx&amp;#34; } } ] 設定ファイルを準備します。 DeleteOnTermination を false に設定します。 $ vim mapping.json [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;DeleteOnTermination&amp;#34;: false } } ] インスタンスの設定変更 $ aws ec2 modify-instance-attribute --instance-id &amp;#34;i-xxxxxxxxxxxxxx&amp;#34; --block-device-mappings file://mapping.json タグでフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が false であることを確認します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .</description>
+      <description>はじめに デフォルトでは、EC2 インスタンスが終了すると、アタッチされた EBS ボリュームも削除されます。しかし、AWS CLI を使用してこれらを永続化する方法を探ってみましょう。 技術要素 EC2/EBS コマンド タグによってフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が true である場合、ボリュームは永続化されていないことを意味します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .Reservations[0].Instances[0].BlockDeviceMappings [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;AttachTime&amp;#34;: &amp;#34;2023-04-18T04:59:14+00:00&amp;#34;, &amp;#34;DeleteOnTermination&amp;#34;: true, &amp;#34;Status&amp;#34;: &amp;#34;attached&amp;#34;, &amp;#34;VolumeId&amp;#34;: &amp;#34;vol-xxxxxxxxxxxx&amp;#34; } } ] 設定ファイルを準備します。 DeleteOnTermination を false に設定します。 $ vim mapping.json [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;DeleteOnTermination&amp;#34;: false } } ] インスタンスの設定変更 $ aws ec2 modify-instance-attribute --instance-id &amp;#34;i-xxxxxxxxxxxxxx&amp;#34; --block-device-mappings file://mapping.json タグでフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が false であることを確認します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .</description>
     </item>
     
     <item>
@@ -187,7 +202,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Wed, 26 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/cicd-oidc/</guid>
-      <description>Intro 以前は、GitHub や Bitbucket から個人の AWS へのデプロイ時にアクセスキーとシークレットキーを使用していました。しかし、これを管理するのが煩雑になったため、OIDC に切り替えました。
+      <description>はじめに 以前は、GitHub や Bitbucket から個人の AWS へのデプロイ時にアクセスキーとシークレットキーを使用していました。しかし、これを管理するのが煩雑になったため、OIDC に切り替えました。
 OIDC (OpenID Connect) は、認証と認可のためのオープンスタンダードです。OIDC を使用することで、AWS へのアクセスを安全に管理し、認証プロバイダを介してシームレスなアクセス体験を提供できます。OIDC を使用する場合、AWS へのアクセスにはアクセストークンが使用されます。
 OIDC を導入することで、アクセスキーやシークレットキーを個別に管理する必要がなくなり、セキュリティと利便性が向上します。
 やること Terraform で OIDC を設定する方法 GitHub Bitbucket OIDC を使用してデプロイする方法 シンプルな GitHub Actions と Bitbucket Pipelines の作成 技術要素 OIDC AWS Bitbucket GitHub Terraform What is OIDC? OIDC（OpenID Connect）は、OAuth 2.0 プロトコルを拡張し、Web アプリケーションやモバイルアプリケーションにおけるユーザー認証の仕組みを提供する認証プロトコルです。
@@ -202,7 +217,7 @@ Benefits of OIDC Git からのデプロイに OIDC を使用することで、�
       <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-lambda-local-execution/</guid>
-      <description>Intro PC の入れ替えに伴い、Lambda のローカル実行環境を再構築した。メモとして残しておきます。 PC リプレースのついでに Lambda のローカル実行環境を再構築。メモとして残しておく。
+      <description>はじめに PC の入れ替えに伴い、Lambda のローカル実行環境を再構築した。メモとして残しておきます。 PC リプレースのついでに Lambda のローカル実行環境を再構築。メモとして残しておく。
 技術要素 Volta Lambda LocalStack TypeScript SAM 前提条件 Installing Volta Volta のインストール Volta は Node.js のバージョン管理に特化したツールです。プロジェクトごとに異なる Node.js のバージョンを切り替えることができ、Node.js のバージョンを手動でインストール・管理することなく、異なるバージョンを簡単に管理することができます。Volta は、他のバージョン管理ツールと比較して切り替えが簡単という利点があり、OS やシェルに依存しないため様々な環境で利用することができます。
 $ curl https://get.volta.sh | bash $ echo &amp;#39;export VOLTA_HOME=&amp;#34;$HOME/.volta&amp;#34;&amp;#39; &amp;gt;&amp;gt; .zshrc $ echo &amp;#39;export PATH=&amp;#34;$VOLTA_HOME/bin:$PATH&amp;#34;&amp;#39; &amp;gt;&amp;gt; .zshrc Node.js と Yarn のインストール 利用可能なバージョンを確認するには、volta list node を使用します。特定のバージョンをインストールしたい場合は、volta install node@18.15.0 というフォーマットを使ってください。
 $ volta install node success: installed and set node@18.15.0 (with npm@9.5.0) as default $ volta install yarn success: installed and set yarn@4.</description>
@@ -214,7 +229,7 @@ $ volta install node success: installed and set node@18.15.0 (with npm@9.5.0) as
       <pubDate>Sat, 22 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/cicd-terragrunt-1/</guid>
-      <description>Intro Terraform の Wrapper ツール、Terragrunt 導入の検証を行いました。 導入の検証 通常、私は Terraform を使用していますが、次のような不便さがありました： 各デプロイの影響範囲を最小限に抑えるために、Git リポジトリをより小さなものに分割する必要がありました。Terraform のバージョンアップが面倒でした。 コードからリソースの依存関係を理解するのが難しかったです。 depends_on が明示的に使用できない場所でデプロイ順序に注意する必要がありました。 導入後の課題 導入に関して、以下の 2 点について検証が保留されています。もし詳しい方がいたら相談に乗っていただけると幸いです。 Terraform の管理だけでなく、Terragrunt のバージョン管理も行う必要があります。バージョンアップのプロセスはどのように変わるのか もし Terragrunt の開発が停止した場合、スムーズに Terraform のコードに戻せるか 技術要素 terraform terragrunt aws Terragrunt とは Terragrunt は、Terraform を使用してインフラストラクチャを管理するための作業を簡素化するための Terraform Wrapper として知られるオープンソースのツールです。Terragrunt は Terraform が提供する機能を拡張し、モジュールのコード再利用、柔軟な構成、再利用性の向上を可能にします。特に、Terraform を使用して複数の環境やアカウントを管理する際に Terragrunt は非常に便利です。
+      <description>はじめに Terraform の Wrapper ツール、Terragrunt 導入の検証を行いました。 導入の検証 通常、私は Terraform を使用していますが、次のような不便さがありました： 各デプロイの影響範囲を最小限に抑えるために、Git リポジトリをより小さなものに分割する必要がありました。Terraform のバージョンアップが面倒でした。 コードからリソースの依存関係を理解するのが難しかったです。 depends_on が明示的に使用できない場所でデプロイ順序に注意する必要がありました。 導入後の課題 導入に関して、以下の 2 点について検証が保留されています。もし詳しい方がいたら相談に乗っていただけると幸いです。 Terraform の管理だけでなく、Terragrunt のバージョン管理も行う必要があります。バージョンアップのプロセスはどのように変わるのか もし Terragrunt の開発が停止した場合、スムーズに Terraform のコードに戻せるか 技術要素 terraform terragrunt aws Terragrunt とは Terragrunt は、Terraform を使用してインフラストラクチャを管理するための作業を簡素化するための Terraform Wrapper として知られるオープンソースのツールです。Terragrunt は Terraform が提供する機能を拡張し、モジュールのコード再利用、柔軟な構成、再利用性の向上を可能にします。特に、Terraform を使用して複数の環境やアカウントを管理する際に Terragrunt は非常に便利です。
 インストール $ brew install tfenv # Installs Terraform (version specified in .terraform-version) $ brew install tgenv # Installs Terragrunt (version specified in .terragrunt-version) ###　フォルダ構成</description>
     </item>
     
@@ -224,7 +239,7 @@ $ volta install node success: installed and set node@18.15.0 (with npm@9.5.0) as
       <pubDate>Tue, 11 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-nat-instance/</guid>
-      <description>Intro AmazonLinux2 を使用して NAT インスタンスを設定しました。構成プロセスに Packer と Ansible を使用しました。
+      <description>はじめに AmazonLinux2 を使用して NAT インスタンスを設定しました。構成プロセスに Packer と Ansible を使用しました。
 AmazonLinux2 を使用して NAT インスタンスを設定します。 Amazonlinux2 が選択する理由 Lambda は外部から開始される着信接続をサポートしていないため、アクティブモードで FTP をサポートしません。 ECS は、プライベート IP アドレスの静的割り当てを許可していません。 Gateway タイプであるため、NAT プライベートゲートウェイと組み合わせることで静的割り当てを実現することは可能ですが、外部ソースからの着信接続を受け入れることはできません。 技術要素 Packer Ansible iptables CENTOS7（AmazonLinux2）では、デフォルトのファイアウォール管理システムはファイアウォールです。ただし、IPTables を紹介して、NAT インスタンスをセットアップします。 ファイル構造 $ tree . . ├── ansible.cfg ├── bin │ └── init.sh ├── inventory │ └── hosts ├── packer-template │ └── nat_instance.json ├── playbook │ └── setup.yml └── roles └── iptable └── tasks ├── main.yml └── templates ├── iptables-config.</description>
     </item>
     
@@ -246,7 +261,7 @@ $ sudo pip3 install selenium $ sudo pip3 install chromedriver-binary==83.0.4103.
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/list/</guid>
-      <description>tags aws Security Tools DevOps Book Recent Posts Cognito を Local で勉強してみた（Moto + LocalStack + API） 2025-11-23 alexa を bedrock で少し賢くしてみた 2025-04-10 EC2(GPU インスタンス) に stable-diffusion-auto1111 を立ち上げる 2024-09-02 ECS タスクに SessionManager で接続する方法 2024-03-27 Docker のイメージをビルドするとき注意すること 2024-03-21 Trivy を用いたコンテナ Image,DockerFile への脆弱性診断 2024-03-21 multipass で ローカル docker 環境の構築 2024-03-20 chatgpt+mermaid でシーケンス図を作成する 2024-02-21 CloudFrontFunction と LambdaEdge の違い 2023-07-21 Docker から Terraform を実行する 2023-07-10 Codebuild 構築と Deploy フローの整備 2023-06-27 EFS バーストモードクレジット枯渇対策メモ 2023-05-03 AWS CLI を使った EC2 への EBS ボリュームの永続化 2023-05-01 Terraform のラッパーツール、Terragrunt の導入検証を行ってみた 2023-04-27 Lambda ローカル開発環境構築メモ (SAM | LocalStack | TypeScript) 2023-04-24 OIDC (Git to AWS)のデプロイメモ 2023-04-26 Packer と Ansible を使って Amazon Linux 2 に NAT インスタンスを作成する 2023-04-11 ブラウザのコンソールログを Selenium(ヘッドレスブラウザ)で取得する 2020-08-26 </description>
+      <description>tags aws Security Tools DevOps Book Recent Posts LocalStack + Terraform + Node.js Lambda が「Cannot find module &amp;lsquo;index&amp;rsquo;」でハマった話 2025-12-02 Cognito を Local で勉強してみた（Moto + LocalStack + API） 2025-11-23 alexa を bedrock で少し賢くしてみた 2025-04-10 EC2(GPU インスタンス) に stable-diffusion-auto1111 を立ち上げる 2024-09-02 ECS タスクに SessionManager で接続する方法 2024-03-27 Docker のイメージをビルドするとき注意すること 2024-03-21 Trivy を用いたコンテナ Image,DockerFile への脆弱性診断 2024-03-21 multipass で ローカル docker 環境の構築 2024-03-20 chatgpt+mermaid でシーケンス図を作成する 2024-02-21 CloudFrontFunction と LambdaEdge の違い 2023-07-21 Docker から Terraform を実行する 2023-07-10 Codebuild 構築と Deploy フローの整備 2023-06-27 EFS バーストモードクレジット枯渇対策メモ 2023-05-03 AWS CLI を使った EC2 への EBS ボリュームの永続化 2023-05-01 Terraform のラッパーツール、Terragrunt の導入検証を行ってみた 2023-04-27 Lambda ローカル開発環境構築メモ (SAM | LocalStack | TypeScript) 2023-04-24 OIDC (Git to AWS)のデプロイメモ 2023-04-26 Packer と Ansible を使って Amazon Linux 2 に NAT インスタンスを作成する 2023-04-11 ブラウザのコンソールログを Selenium(ヘッドレスブラウザ)で取得する 2020-08-26 </description>
     </item>
     
     <item>

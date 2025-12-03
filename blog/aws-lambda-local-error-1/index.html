@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>profile | LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話</title>
+  <meta name="description" content="">
+
+  
+  
+    <meta property="og:image" content="https://h-neco.github.io/img/profile.png" />
+    <meta property="og:title" content="profile | LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話" />   
+  
+  <meta property="og:description" content="" />
+  <meta name="author" content="h neco">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900&display=swap"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap"></noscript>
+  <link rel="preload" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/css/devicons.min.css" integrity="sha512-JW3fT0YTK7pT7w437SoX6GcW76jOZ6E0jGmrqBAcloC4GKT+njHOY4fX5KxJ9WfIXTkNrAF994525fAHp+KCxg==" crossorigin="anonymous" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/css/devicons.min.css" integrity="sha512-JW3fT0YTK7pT7w437SoX6GcW76jOZ6E0jGmrqBAcloC4GKT+njHOY4fX5KxJ9WfIXTkNrAF994525fAHp+KCxg==" crossorigin="anonymous"></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" integrity="sha512-QKC1UZ/ZHNgFzVKSAhV5v5j73eeL9EEN289eKAEFaAjgAiobVAnVv/AGuPbXsKl1dNoel3kNr6PYnSiTzVVBCw==" crossorigin="anonymous" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" integrity="sha512-QKC1UZ/ZHNgFzVKSAhV5v5j73eeL9EEN289eKAEFaAjgAiobVAnVv/AGuPbXsKl1dNoel3kNr6PYnSiTzVVBCw==" crossorigin="anonymous"></noscript>
+  
+  <link rel="preload" href="https://h-neco.github.io/css/resume.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/resume.css"></noscript>
+  <link rel="preload" href="https://h-neco.github.io/css/tweaks.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/tweaks.css"></noscript>
+  <link rel="preload" href="https://h-neco.github.io/css/resume-override.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://h-neco.github.io/css/resume-override.css"></noscript>
+  <meta name="generator" content="Hugo 0.111.3">
+  
+   
+  
+</head>
+<body id="page-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-profile fixed-top" id="sideNav">
+  <a class="navbar-brand js-scroll-trigger" href="#page-top">
+    <span class="d-block d-lg-none">h neco</span>
+    <span class="d-none d-lg-block">
+      <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/img/profile.png" alt="">
+    </span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/#about">About</a>
+      </li>
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#skills">Skills</a>
+          </li>
+      
+      
+      
+      
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#experience">Experience</a>
+          </li>
+      
+      
+      
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/#blog">Blog</a>
+          </li>
+      
+    </ul>
+  </div>
+</nav>
+
+  <div class="container-fluid p-0">
+    
+<nav aria-label="breadcrumb">
+  <ol  class="breadcrumb">
+    
+
+
+
+
+
+<li class="breadcrumb-item">
+  <a href="https://h-neco.github.io/">Home</a>
+</li>
+
+
+<li class="breadcrumb-item">
+  <a href="https://h-neco.github.io/blog/">Blog</a>
+</li>
+
+
+<li class="breadcrumb-item active">
+  <a href="https://h-neco.github.io/blog/aws-lambda-local-error-1/">LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話</a>
+</li>
+
+  </ol>
+</nav>
+
+
+
+
+<section class="resume-section p-3 p-lg-5 d-flex flex-column">
+  <div class="my-auto">
+  	<div class="mb-3 d-flex flex-row justify-content-between">
+    	<h2 class="mb-0"><span class="text-primary">LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話</span></h2>
+    	<span class="">December 2, 2025</span>
+    </div>
+    <div>
+    	<h2 id="はじめに">はじめに</h2>
+<p>LocalStack + Terraform + Node.js Lambda で Lambda をデプロイしたときに、以下のエラーでハマりました。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-v" data-lang="v"><span style="display:flex;"><span><span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>runtime<span style="color:#f92672">/</span>index.mjs
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Cannot</span> find <span style="color:#f92672">module</span> <span style="color:#e6db74">&#39;index&#39;</span>
+</span></span></code></pre></div><p>結論から言うと、原因は Terraform の archive_file ではなく、LocalStack が ZIP 内の index.js を ESM と誤判定すること です。</p>
+<h2 id="発生したエラー">発生したエラー</h2>
+<ul>
+<li>端末で手動で ZIP 化した場合は正常に Lambda が動作</li>
+<li>sam local でも AWS 本番環境でも正常</li>
+<li><!-- raw HTML omitted -->Terraform で archive_file を使って作った ZIP を LocalStack にデプロイするとエラー<!-- raw HTML omitted --></li>
+</ul>
+<p>つまり、ZIP の中身や展開自体は問題ではなく、LocalStack がモジュール形式を判定する段階で誤っている のが原因です。</p>
+<h2 id="原因">原因</h2>
+<p>LocalStack の Node.js 20 ランタイム（あるいは内部の ZIP 処理）が、CommonJS の index.js を ESM と誤判定して index.mjs を読み込もうとするため発生します。</p>
+<p>結果として以下のようなエラーが出ます。</p>
+<p>Require stack:</p>
+<ul>
+<li>/var/runtime/index.mjs
+Cannot find module &lsquo;index&rsquo;</li>
+</ul>
+<h2 id="解決策">解決策</h2>
+<p>この問題を回避するには、以下の方法があります</p>
+<ul>
+<li>AWS CLI 経由で ZIP を直接アップロードする</li>
+<li>esbuild で CommonJS としてビルドして、zip 化する</li>
+<li>LocalStack の Node ランタイム修正を待つ</li>
+</ul>
+<h2 id="実装例">実装例</h2>
+<p>Terraform では ZIP を読むだけにする
+Terraform に ZIP を作らせず、自前でビルドスクリプトで ZIP を作る方法が安全です。</p>
+<ul>
+<li>ビルドスクリプト</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">esbuild</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;esbuild&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">zip</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;zip-a-folder&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">esbuild</span>.<span style="color:#a6e22e">build</span>({
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">entryPoints</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;src/index.ts&#34;</span>],
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">bundle</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">minify</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">platform</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;node&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">target</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;es2021&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">outfile</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;dist/index.js&#34;</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">zip</span>(<span style="color:#e6db74">&#34;dist&#34;</span>, <span style="color:#e6db74">&#34;build/payment_initiator.zip&#34;</span>);
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><ul>
+<li>Terraform</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">resource</span> <span style="color:#e6db74">&#34;aws_lambda_function&#34;</span> <span style="color:#e6db74">&#34;payment_initiator&#34;</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">filename</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${path.module}/build/payment_initiator.zip&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">source_code_hash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">filebase64sha256</span>(<span style="color:#e6db74">&#34;${path.module}/build/payment_initiator.zip&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handler</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.handler&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">runtime</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;nodejs20.x&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">role</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">aws_iam_role</span>.<span style="color:#a6e22e">lambda_role</span>.<span style="color:#a6e22e">arn</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">depends_on</span> <span style="color:#f92672">=</span> [<span style="color:#a6e22e">aws_iam_role_policy</span>.<span style="color:#a6e22e">lambda_ddb_policy</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="まとめ">まとめ</h2>
+<p>Cannot find module &lsquo;index&rsquo; は LocalStack の Node.js ランタイムによる ESM 誤判定バグ
+Terraform では ZIP を作らせず、ビルドスクリプトで ZIP を作るのがシンプル</p>
+
+	    
+	</div>
+    <div>
+    	
+    </div>
+    <ul class="tags">
+    
+</ul>
+
+  </div>
+</section>
+
+    <section><span style="color: #999999;">Nifty <a href="https://codepen.io/wbeeftink/pen/dIaDH">tech tag lists</a> from <a class="pen-owner-link" href="https://codepen.io/wbeeftink">Wouter Beeftink</a> </span>
+      
+    </section>
+  </div>
+  
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+  
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous"></script>
+  
+  <script async src="/js/resume.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6BYZ5M6VX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-Z6BYZ5M6VX');
+  </script>
+  
+
+  
+</body>
+</html>

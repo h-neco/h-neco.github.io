@@ -32,7 +32,7 @@ reflected stored DOM-based 対策 CSP エスケープ サニタイズ URL スキ
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/docker-security-image-build/</guid>
-      <description>Intro クレデンシャルをビルド中に削除しても、レイヤに残ってしまう件について実際に手を動かして確認してみます。
+      <description>はじめに クレデンシャルをビルド中に削除しても、レイヤに残ってしまう件について実際に手を動かして確認してみます。
 docker の環境構築についてはこちら 環境構築 事前準備 適当なディレクトリを作成し、Dockerfile を作成します。 シークレットにすべき内容を含むファイルを作成し、削除します。 ubuntu@test-vm-01:~/test$ cat Dockerfile FROM public.ecr.aws/nginx/nginx:1.25-alpine-slim RUN echo &amp;#34;this is secret&amp;#34; &amp;gt; /secret.txt RUN rm /secret.txt build ubuntu@test-vm-01:~/test$ docker build -f Dockerfile -t test:latast . イメージを保存し、レイヤを確認します。 ubuntu@test-vm-01:~/test$ docker save test:latast | tar -xC dump/ ubuntu@test-vm-01:~/test$ grep &amp;#34;this is secret&amp;#34; dump/blobs/sha256/26e6cd8b82ed33846375b5484f907ec7547b1b58919e607d7954f6ed9f36f5ab ... {&amp;#34;created&amp;#34;:&amp;#34;2024-03-21T16:21:04.288826451+09:00&amp;#34;,&amp;#34;created_by&amp;#34;:&amp;#34;RUN /bin/sh -c echo \&amp;#34;this is secret\&amp;#34; \u003e /secret.txt # buildkit&amp;#34;,&amp;#34;comment&amp;#34;:&amp;#34;buildkit.dockerfile.v0&amp;#34;},{&amp;#34;created&amp;#34;:&amp;#34;2024-03-21T16:21:04.637976236+09:00&amp;#34;,&amp;#34;created_by&amp;#34;:&amp;#34;RUN /bin/sh -c rm /secret.txt # buildkit&amp;#34;,&amp;#34;comment&amp;#34;:&amp;#34;buildkit.dockerfile.v0&amp;#34;}],&amp;#34;os&amp;#34;:&amp;#34;linux&amp;#34;,&amp;#34;rootfs&amp;#34;:{&amp;#34;type&amp;#34;:&amp;#34;layers&amp;#34;,&amp;#34;diff_ids&amp;#34;: ... まとめ クレデンシャルをビルド中に削除しても、レイヤに残ってしまうので、公開するイメージには含めないようにすることが重要です。 </description>
     </item>
     
@@ -42,7 +42,7 @@ docker の環境構築についてはこちら 環境構築 事前準備 適当�
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/docker-trivy/</guid>
-      <description>Intro trivy は、コンテナイメージの脆弱性診断を行うツールです。trivy を使用することで、コンテナイメージに含まれる脆弱性を検出し、セキュリティを向上させることができます。
+      <description>はじめに trivy は、コンテナイメージの脆弱性診断を行うツールです。trivy を使用することで、コンテナイメージに含まれる脆弱性を検出し、セキュリティを向上させることができます。
 docker の環境構築についてはこちら 環境構築 作業の大枠 Dockerfile に対して trivy で診断を行います。 問題なければ、イメージをビルドし、trivy で再度スキャンを行います。 事前準備 適当なディレクトリを作成し、Dockerfile を作成します。 $ mkdir test $ vim test/Dockerfile FROM public.ecr.aws/nginx/nginx:1.25-alpine-slim EXPOSE 80/tcp 診断 DockerFile を trivy で診断します。config コマンドを実行します。 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/test:/workdir aquasec/trivy config --ignorefile .trivy/.trivyignore --severity HIGH,CRITICAL . 2024-03-20T13:16:35.209Z	INFO	Misconfiguration scanning is enabled 2024-03-20T13:16:35.210Z	INFO	Need to update the built-in policies 2024-03-20T13:16:35.211Z	INFO	Downloading the built-in policies... 46.13 KiB / 46.</description>
     </item>
     

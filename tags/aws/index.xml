@@ -6,7 +6,22 @@
     <description>Recent content in AWS on profile</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://h-neco.github.io/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://h-neco.github.io/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LocalStack &#43; Terraform &#43; Node.js Lambda が「Cannot find module &#39;index&#39;」でハマった話</title>
+      <link>https://h-neco.github.io/blog/aws-lambda-local-error-1/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://h-neco.github.io/blog/aws-lambda-local-error-1/</guid>
+      <description>はじめに LocalStack + Terraform + Node.js Lambda で Lambda をデプロイしたときに、以下のエラーでハマりました。
+/var/runtime/index.mjs Cannot find module &amp;#39;index&amp;#39; 結論から言うと、原因は Terraform の archive_file ではなく、LocalStack が ZIP 内の index.js を ESM と誤判定すること です。
+発生したエラー 端末で手動で ZIP 化した場合は正常に Lambda が動作 sam local でも AWS 本番環境でも正常 Terraform で archive_file を使って作った ZIP を LocalStack にデプロイするとエラー つまり、ZIP の中身や展開自体は問題ではなく、LocalStack がモジュール形式を判定する段階で誤っている のが原因です。
+原因 LocalStack の Node.js 20 ランタイム（あるいは内部の ZIP 処理）が、CommonJS の index.js を ESM と誤判定して index.mjs を読み込もうとするため発生します。
+結果として以下のようなエラーが出ます。
+Require stack:
+/var/runtime/index.mjs Cannot find module &amp;lsquo;index&amp;rsquo; 解決策 この問題を回避するには、以下の方法があります</description>
+    </item>
+    
     <item>
       <title>Cognito を Local で勉強してみた（Moto &#43; LocalStack &#43; API）</title>
       <link>https://h-neco.github.io/blog/aws-cognito-study-local/</link>
@@ -39,7 +54,7 @@ services: localstack: image: localstack/localstack container_name: localstack po
       <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-stable-diffusion/</guid>
-      <description>Intro EC2 で Stable diffusion を実現するためのメモです。 EC2 自体の構築やセキュリティグループ、VPC などの設定は割愛しています。
+      <description>はじめに EC2 で Stable diffusion を実現するためのメモです。 EC2 自体の構築やセキュリティグループ、VPC などの設定は割愛しています。
 GPU インスタンスを使用 stable-diffusion-webui を使用 python 3.10.6 を使用 nginx でリバースプロキシ 環境 イメージ：amazon linux 2023
 インスタンスタイプ：g4dn.xlarge
 GPU 環境構築 NVIDIA ドライバーと CUDA をインストール 参考 https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/install-nvidia-driver.html https://docs.nvidia.com/cuda/cuda-installation-guide-linux/#amazon-linux-2023 dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) kernel-modules-extra-$(uname -r) dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/amzn2023/x86_64/cuda-amzn2023.repo dnf module install nvidia-driver:latest-dkms dnf install cuda-toolkit dnf install nvidia-gds stable-diffusion-webui の構築 インストール git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui cd stable-diffusion-webui ln -s . stable-diffusion-webui # 起動スクリプト修正(shareオプションは使わない) vim webui-user.sh export COMMANDLINE_ARGS=&amp;#34;--xformers --enable-insecure-extension-access&amp;#34; python 環境構築 python 3.</description>
@@ -86,7 +101,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-efs/</guid>
-      <description>Intro EFS バーストモードのクレジット枯渇対策メモ EFS をバーストモードで使用していて、クレジットが不足してきたため、私が取った対策をメモとして提供します。 技術要素 EFS aws EFS の 2 つのモード EFS には 2 つのモードがあります: バーストモード（汎用）とプロビジョンドモード。
+      <description>はじめに EFS バーストモードのクレジット枯渇対策メモ EFS をバーストモードで使用していて、クレジットが不足してきたため、私が取った対策をメモとして提供します。 技術要素 EFS aws EFS の 2 つのモード EFS には 2 つのモードがあります: バーストモード（汎用）とプロビジョンドモード。
 バーストモードは、使用されているストレージの量に基づいてトラフィックを自動的に調整し、一時的なトラフィックの増加に対応できます。バースト可能な帯域幅はトラフィックの使用状況によって異なり、最低 105 Mbps のバーストが可能です。ただし、1 秒あたりの読み取り/書き込みリクエストの数には制限があり、制限を超えるとスループットが低下する可能性があります。
 プロビジョンドモードでは、ボリュームのスループット、最小/最大/バースト、および書き込みスループットを設定できます。読み取りスループットは書き込みスループットの 3 倍です。プロビジョンドモードはトラフィックに基づいた自動スケーリングはありませんが、スループットの設定に基づいて必要なトラフィックに対応できます。
 バーストモード（汎用）の注意事項と対策 バーストモード（汎用）の注意事項と対策
@@ -105,7 +120,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-ebs-delete-on-termination/</guid>
-      <description>Intro デフォルトでは、EC2 インスタンスが終了すると、アタッチされた EBS ボリュームも削除されます。しかし、AWS CLI を使用してこれらを永続化する方法を探ってみましょう。 技術要素 EC2/EBS コマンド タグによってフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が true である場合、ボリュームは永続化されていないことを意味します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .Reservations[0].Instances[0].BlockDeviceMappings [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;AttachTime&amp;#34;: &amp;#34;2023-04-18T04:59:14+00:00&amp;#34;, &amp;#34;DeleteOnTermination&amp;#34;: true, &amp;#34;Status&amp;#34;: &amp;#34;attached&amp;#34;, &amp;#34;VolumeId&amp;#34;: &amp;#34;vol-xxxxxxxxxxxx&amp;#34; } } ] 設定ファイルを準備します。 DeleteOnTermination を false に設定します。 $ vim mapping.json [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;DeleteOnTermination&amp;#34;: false } } ] インスタンスの設定変更 $ aws ec2 modify-instance-attribute --instance-id &amp;#34;i-xxxxxxxxxxxxxx&amp;#34; --block-device-mappings file://mapping.json タグでフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が false であることを確認します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .</description>
+      <description>はじめに デフォルトでは、EC2 インスタンスが終了すると、アタッチされた EBS ボリュームも削除されます。しかし、AWS CLI を使用してこれらを永続化する方法を探ってみましょう。 技術要素 EC2/EBS コマンド タグによってフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が true である場合、ボリュームは永続化されていないことを意味します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .Reservations[0].Instances[0].BlockDeviceMappings [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;AttachTime&amp;#34;: &amp;#34;2023-04-18T04:59:14+00:00&amp;#34;, &amp;#34;DeleteOnTermination&amp;#34;: true, &amp;#34;Status&amp;#34;: &amp;#34;attached&amp;#34;, &amp;#34;VolumeId&amp;#34;: &amp;#34;vol-xxxxxxxxxxxx&amp;#34; } } ] 設定ファイルを準備します。 DeleteOnTermination を false に設定します。 $ vim mapping.json [ { &amp;#34;DeviceName&amp;#34;: &amp;#34;/dev/sda1&amp;#34;, &amp;#34;Ebs&amp;#34;: { &amp;#34;DeleteOnTermination&amp;#34;: false } } ] インスタンスの設定変更 $ aws ec2 modify-instance-attribute --instance-id &amp;#34;i-xxxxxxxxxxxxxx&amp;#34; --block-device-mappings file://mapping.json タグでフィルタリングされた対象インスタンスのボリューム情報を取得します。 DeleteOnTermination が false であることを確認します。 $ aws ec2 describe-instances --filters &amp;#34;Name=tag:Name,Values=xxxxx-prod-web01&amp;#34; | jq -r .</description>
     </item>
     
     <item>
@@ -114,7 +129,7 @@ CloudFront Functions を使用すると、よりユーザーに近いエッジ�
       <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-lambda-local-execution/</guid>
-      <description>Intro PC の入れ替えに伴い、Lambda のローカル実行環境を再構築した。メモとして残しておきます。 PC リプレースのついでに Lambda のローカル実行環境を再構築。メモとして残しておく。
+      <description>はじめに PC の入れ替えに伴い、Lambda のローカル実行環境を再構築した。メモとして残しておきます。 PC リプレースのついでに Lambda のローカル実行環境を再構築。メモとして残しておく。
 技術要素 Volta Lambda LocalStack TypeScript SAM 前提条件 Installing Volta Volta のインストール Volta は Node.js のバージョン管理に特化したツールです。プロジェクトごとに異なる Node.js のバージョンを切り替えることができ、Node.js のバージョンを手動でインストール・管理することなく、異なるバージョンを簡単に管理することができます。Volta は、他のバージョン管理ツールと比較して切り替えが簡単という利点があり、OS やシェルに依存しないため様々な環境で利用することができます。
 $ curl https://get.volta.sh | bash $ echo &amp;#39;export VOLTA_HOME=&amp;#34;$HOME/.volta&amp;#34;&amp;#39; &amp;gt;&amp;gt; .zshrc $ echo &amp;#39;export PATH=&amp;#34;$VOLTA_HOME/bin:$PATH&amp;#34;&amp;#39; &amp;gt;&amp;gt; .zshrc Node.js と Yarn のインストール 利用可能なバージョンを確認するには、volta list node を使用します。特定のバージョンをインストールしたい場合は、volta install node@18.15.0 というフォーマットを使ってください。
 $ volta install node success: installed and set node@18.15.0 (with npm@9.5.0) as default $ volta install yarn success: installed and set yarn@4.</description>
@@ -126,7 +141,7 @@ $ volta install node success: installed and set node@18.15.0 (with npm@9.5.0) as
       <pubDate>Tue, 11 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://h-neco.github.io/blog/aws-ec2-nat-instance/</guid>
-      <description>Intro AmazonLinux2 を使用して NAT インスタンスを設定しました。構成プロセスに Packer と Ansible を使用しました。
+      <description>はじめに AmazonLinux2 を使用して NAT インスタンスを設定しました。構成プロセスに Packer と Ansible を使用しました。
 AmazonLinux2 を使用して NAT インスタンスを設定します。 Amazonlinux2 が選択する理由 Lambda は外部から開始される着信接続をサポートしていないため、アクティブモードで FTP をサポートしません。 ECS は、プライベート IP アドレスの静的割り当てを許可していません。 Gateway タイプであるため、NAT プライベートゲートウェイと組み合わせることで静的割り当てを実現することは可能ですが、外部ソースからの着信接続を受け入れることはできません。 技術要素 Packer Ansible iptables CENTOS7（AmazonLinux2）では、デフォルトのファイアウォール管理システムはファイアウォールです。ただし、IPTables を紹介して、NAT インスタンスをセットアップします。 ファイル構造 $ tree . . ├── ansible.cfg ├── bin │ └── init.sh ├── inventory │ └── hosts ├── packer-template │ └── nat_instance.json ├── playbook │ └── setup.yml └── roles └── iptable └── tasks ├── main.yml └── templates ├── iptables-config.</description>
     </item>
     
